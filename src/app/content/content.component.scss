@@ -1,0 +1,25 @@
+.example-container {
+    width: 75%;
+    float: right;
+    height: 90vh;
+    overflow: scroll;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    float: right;
+}
+
+tr.example-element-row:hover {
+    background: darken(#efefef, 10%);
+    cursor: pointer;
+}
+
+tr.example-element-row:active {
+    background: #efefef;
+}
