@@ -5,35 +5,21 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material';
 
 export interface User {
-  name: string;
+  _id: string;
+  index: number;
+  guid: string;
+  age: number;
+  eyeColor: string;
+  name: {
+    first: string,
+    last: string
+  };
+  company: string;
   email: string;
   phone: string;
-  website: string;
-  id: number;
-  username: string;
-  address: {
-    street: string,
-    suite: string,
-    city: string,
-    zipcode: string,
-    geo: {
-      lat: string,
-      lng: string
-    }
-  };
-  company: {
-    name: string,
-    catchPhrase: string,
-    bs: string
-  };
+  address: string;
+  registered: string;
 }
-
-/*export interface User {
-  userId: string;
-  id: string;
-  title: string;
-  completed: string;
-}*/
 
 @Component({
   selector: 'app-content',
@@ -42,13 +28,15 @@ export interface User {
 })
 
 export class ContentComponent implements OnInit {
-  dataSource: User[] = new Array(200);
+  dataSource: User[] = new Array(2000);
   dataLength: number = this.dataSource.length;
-  pageLength = 40;
+  pageLength = 100;
   public tableDataSource: MatTableDataSource<any> = new MatTableDataSource();
-  public displayedColumns: string[] = ['id', 'name', 'email', 'phone', 'website'];
+  public displayedColumns: string[] = ['name', 'last name', 'email', 'phone', 'company'];
+
   // public displayedColumns: string[] = ['userId', 'id', 'title', 'completed'];
   expandedElement: User | null;
+  factorial: number;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -75,9 +63,10 @@ export class ContentComponent implements OnInit {
   @HostListener('scroll', ['$event'])
   onScroll(event) {
     const elem = event.currentTarget;
+    console.log(elem.scrollTop, elem.scrollHeight);
     // if ((elem.innerHeight + elem.pageYOffset + 200) >= document.body.offsetHeight && this.pageLength <= this.dataLength) {
-    if ((elem.scrollTop + 200) >= (elem.scrollHeight - 1900) && this.pageLength <= this.dataLength) {
-      this.pageLength += 40;
+    if ((elem.scrollTop + 110) >= (elem.scrollHeight - 1900 * (this.pageLength / 100)) && this.pageLength <= this.dataLength) {
+      this.pageLength += 100;
       this.paginator._changePageSize(this.pageLength);
     }
   }
@@ -88,26 +77,3 @@ export class ContentComponent implements OnInit {
 
 }
 
-/*export class TableFilter implements OnInit {
-
-  constructor(private service: UserService) {}
-
-  displayedColumns: string[] = ['id', 'name', 'email', 'phone', 'website' ];
-  expandedElement: User | null;
-
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-
-  dataSource;
-
-  ngOnInit() {
-   this.service.getAll()
-       .subscribe((users: User[]) => {
-         this.dataSource = new MatTableDataSource(users);
-         this.dataSource.sort = this.sort;
-       });
-  }
-
-  applyFilter(filterValue: string) {
-     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-}*/
