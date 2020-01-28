@@ -10,7 +10,7 @@ export class UserService {
   // tslint:disable-next-line: variable-name
   constructor(private _http: HttpClient) { }
 
-  // url = "https://jsonplaceholder.typicode.com/users/";
+  // url = "https://jsonplaceholder.typicode.com/users/"; https://5b0bd503.ngrok.io/users/
   url = 'http://localhost:3000/users/';
   public getAll() {
     return this._http.get(this.url);
