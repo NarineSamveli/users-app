@@ -63,9 +63,9 @@ export class ContentComponent implements OnInit {
   @HostListener('scroll', ['$event'])
   onScroll(event) {
     const elem = event.currentTarget;
-    console.log(elem.scrollTop, elem.scrollHeight);
+    // console.log(elem.scrollTop, elem.scrollHeight);
     // if ((elem.innerHeight + elem.pageYOffset + 200) >= document.body.offsetHeight && this.pageLength <= this.dataLength) {
-    if ((elem.scrollTop + 110) >= (elem.scrollHeight - 1900 * (this.pageLength / 100)) && this.pageLength <= this.dataLength) {
+    if ((elem.scrollTop + 710 >= elem.scrollHeight) && (this.pageLength <= this.dataLength)) {
       this.pageLength += 100;
       this.paginator._changePageSize(this.pageLength);
     }
