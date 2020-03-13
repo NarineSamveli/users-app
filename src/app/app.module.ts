@@ -20,6 +20,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UserResolveService } from './user-resolve.service';
+import {CdkTableModule} from '@angular/cdk/table';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -43,9 +46,12 @@ import { UserResolveService } from './user-resolve.service';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    ScrollingModule
+    ScrollingModule,
+    CdkTableModule,
+    NgbModule
   ],
   exports: [
+    AppComponent,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule

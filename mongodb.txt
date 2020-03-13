@@ -1,3 +1,7 @@
 >> use app
 >> db.createCollection("users")
 >> ngrok http 4200 -host-header="localhost:4200"
+
+ngrok authtoken 1X1uJNOtI6cbgT11o4Vm0LAa8OS_yYfcFEDGrjN7y6oecjC9
+
+ngrok authtoken 1X1hScCIHKA4NAJCY5xFyVygfwl_F7DqsB4ovujow2x7T4sU

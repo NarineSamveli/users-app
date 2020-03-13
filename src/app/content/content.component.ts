@@ -3,6 +3,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from 'src/app/user.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material';
+import {Sort} from '@angular/material/sort';
+
+
 
 export interface User {
   _id: string;
@@ -34,7 +37,6 @@ export class ContentComponent implements OnInit {
   public tableDataSource: MatTableDataSource<any> = new MatTableDataSource();
   public displayedColumns: string[] = ['name', 'last name', 'email', 'phone', 'company'];
 
-  // public displayedColumns: string[] = ['userId', 'id', 'title', 'completed'];
   expandedElement: User | null;
   factorial: number;
 
@@ -64,8 +66,7 @@ export class ContentComponent implements OnInit {
   onScroll(event) {
     const elem = event.currentTarget;
     // console.log(elem.scrollTop, elem.scrollHeight);
-    // if ((elem.innerHeight + elem.pageYOffset + 200) >= document.body.offsetHeight && this.pageLength <= this.dataLength) {
-    if ((elem.scrollTop + 710 >= elem.scrollHeight) && (this.pageLength <= this.dataLength)) {
+    if ((elem.scrollTop + 750 >= elem.scrollHeight) && (this.pageLength <= this.dataLength)) {
       this.pageLength += 100;
       this.paginator._changePageSize(this.pageLength);
     }
@@ -75,5 +76,29 @@ export class ContentComponent implements OnInit {
     this.tableDataSource.filter = filterValue.trim().toLowerCase();
  }
 
+
+ sortData(sort: Sort) {
+  const data = this.tableDataSource.data.slice();
+  if (!sort.active || sort.direction === '') {
+    this.tableDataSource.data = data;
+    return;
+  }
+
+  this.tableDataSource.data = data.sort((a, b) => {
+    const isAsc = sort.direction === 'asc';
+    switch (sort.active) {
+      case 'fname': return compare(a.name.first, b.name.first, isAsc);
+      case 'lname': return compare(a.name.last, b.name.last, isAsc);
+      case 'email': return compare(a.email, b.email, isAsc);
+      case 'phone': return compare(a.phone, b.phone, isAsc);
+      case 'company': return compare(a.company, b.company, isAsc);
+      default: return 0;
+    }
+  });
 }
 
+}
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
