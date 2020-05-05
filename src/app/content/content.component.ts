@@ -4,8 +4,8 @@ import { UserService } from 'src/app/user.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material';
 import {Sort} from '@angular/material/sort';
-
-
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 export interface User {
   _id: string;
@@ -34,6 +34,8 @@ export class ContentComponent implements OnInit {
   dataSource: User[] = new Array(2000);
   dataLength: number = this.dataSource.length;
   pageLength = 100;
+  batch = 100;
+
   public tableDataSource: MatTableDataSource<any> = new MatTableDataSource();
   public displayedColumns: string[] = ['name', 'last name', 'email', 'phone', 'company'];
 
@@ -41,7 +43,11 @@ export class ContentComponent implements OnInit {
   factorial: number;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(CdkVirtualScrollViewport, {static: true}) viewport: CdkVirtualScrollViewport;
 
+  theEnd = false;
+
+  offset = new BehaviorSubject(null);
   paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), this.ref);
 
   constructor(
@@ -50,10 +56,10 @@ export class ContentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.service.getAll()
+    // this.service.getAll()
+    this.service.getBatch(this.pageLength)
        .subscribe((users: User[]) => {
         this.dataSource = users;
-
         this.paginator.pageSize = this.pageLength;
         this.paginator.ngOnInit();
         this.tableDataSource.paginator = this.paginator;
@@ -62,20 +68,35 @@ export class ContentComponent implements OnInit {
        });
   }
 
-  @HostListener('scroll', ['$event'])
-  onScroll(event) {
-    const elem = event.currentTarget;
-    // console.log(elem.scrollTop, elem.scrollHeight);
-    if ((elem.scrollTop + 750 >= elem.scrollHeight) && (this.pageLength <= this.dataLength)) {
-      this.pageLength += 100;
+  nextBatch(e, offset) {
+    if (this.theEnd) {
+      return;
+    }
+    const end = this.viewport.getRenderedRange().end;
+    const total = this.viewport.getDataLength();
+    console.log(`${end}, '>=', ${total}`);
+    if ((end === total) && (total > 0)) { // (total === this.pageLength)
+
+      this.pageLength += this.batch;
+      this.service.getBatch(this.pageLength)
+       .subscribe((users: User[]) => {
+        this.dataSource = users;
+        if (this.dataSource.length === 0) { this.theEnd = true; }
+       });
+
+      const oldTableDataSource = this.tableDataSource.data;
+      this.tableDataSource.data = oldTableDataSource.concat(this.dataSource);
       this.paginator._changePageSize(this.pageLength);
     }
+  }
+
+  trackByIdx(i) {
+    return i;
   }
 
   applyFilter(filterValue: string) {
     this.tableDataSource.filter = filterValue.trim().toLowerCase();
  }
-
 
  sortData(sort: Sort) {
   const data = this.tableDataSource.data.slice();

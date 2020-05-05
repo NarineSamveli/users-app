@@ -1,3 +1,7 @@
+"C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" --dbpath="c:\data\db"
+"C:\Program Files\MongoDB\Server\4.2\bin\mongo.exe"
+
+
 >> use app
 >> db.createCollection("users")
 >> ngrok http 4200 -host-header="localhost:4200"

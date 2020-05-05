@@ -1,25 +1,26 @@
 <div class="example-container mat-elevation-z8">
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-    </mat-form-field>
-  <cdk-virtual-scroll-viewport itemSize="20" class="example-viewport" (scroll)="onScroll($event)">
-    <table matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
-        <th mat-sort-header="fname" class="example-element-row"> First name </th>
-        <th mat-sort-header="lname" class="example-element-row"> Last name </th>
-        <th mat-sort-header="email" class="example-element-row"> Email </th>
-        <th mat-sort-header="phone" class="example-element-row"> Phone </th>
-        <th mat-sort-header="company" class="example-element-row"> Company </th>
-      <ng-container  *cdkVirtualFor="let element of tableDataSource">
-          <tr class="example-element-row"
-              [class.example-expanded-row]="expandedElement === element"
-                  routerLink="{{element._id}}">
-              <td class="example-dd">{{element.name.first}}</td>
-              <td class="example-dd">{{element.name.last}}</td>
-              <td class="example-dd">{{element.email}}</td>
-              <td class="example-dd">{{element.phone}}</td>
-              <td class="example-dd">{{element.company}}</td>
-          </tr>
-      </ng-container> 
-    </table>
-  </cdk-virtual-scroll-viewport>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+<cdk-virtual-scroll-viewport itemSize="20" class="example-viewport" 
+  (scrolledIndexChange)="nextBatch($event, (tableDataSource.data.length))">
+  <table matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
+      <th mat-sort-header="fname" class="example-element-row"> First name </th>
+      <th mat-sort-header="lname" class="example-element-row"> Last name </th>
+      <th mat-sort-header="email" class="example-element-row"> Email </th>
+      <th mat-sort-header="phone" class="example-element-row"> Phone </th>
+      <th mat-sort-header="company" class="example-element-row"> Company </th>
+    <ng-container  *cdkVirtualFor="let element of tableDataSource; let i = index; trackBy: trackByIdx">
+        <tr class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+                routerLink="{{element._id}}">
+            <td class="example-dd">{{element.name.first}}</td>
+            <td class="example-dd">{{element.name.last}}</td>
+            <td class="example-dd">{{element.email}}</td>
+            <td class="example-dd">{{element.phone}}</td>
+            <td class="example-dd">{{element.company}}</td>
+        </tr>
+    </ng-container> 
+  </table>
+</cdk-virtual-scroll-viewport>
 </div> 

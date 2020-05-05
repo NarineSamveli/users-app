@@ -45,6 +45,14 @@ app.get("/users", function(req, res){
         res.send(users)
     });
 });
+
+app.get("/users/:start", function(req, res){
+  const start = req.params.start;
+    User.find({}, function(err, users){
+        if(err) return console.log(err);
+        res.send(users)
+    }).sort({ $natural: 1 }).skip(start - 100).limit(100);
+});
  
 app.get("/users/:id", function(req, res){
     const id = req.params.id;
